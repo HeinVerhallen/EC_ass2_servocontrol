@@ -1,0 +1,1 @@
+ $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"src" -I"inc"   -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)    C:\Users\andre\OneDrive\EC_projects\EC_ass2_servocontrol.X\src\debounce.c
