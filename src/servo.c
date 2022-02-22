@@ -30,7 +30,9 @@
 #include <sys/attribs.h>
 
 #include <config.h>
+#include <stdbool.h>
 
+#include <timer.h> // bad practice
 
 
 unsigned char servo_init
@@ -51,12 +53,18 @@ int angle
         return false;
     }
     
+    timer_register_T2callback(servo_T2callback);
     
     
     pwm_init(fpb, 2, channel, 20);
     servo_setpos(channel,angle);
 
     return 1;
+}
+
+void servo_T2callback()
+{
+    PORTAbits.RA15 = 1;
 }
 
 void servo_setpos

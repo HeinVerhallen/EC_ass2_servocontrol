@@ -10,6 +10,15 @@
 int clk;
 int prd1, prd2, prd3, prd4, prd5;
 
+T2callback T2callbackfp;
+unsigned char T2callbackflag = 0;
+
+void timer_register_T2callback(T2callback ptr_T2callback) 
+{
+    T2callbackfp = ptr_T2callback;
+    T2callbackflag = 1;
+}
+
 int timer_init(int freq, int channel, int periodMs, int interruptEnabled, int interruptPriority) {    
     clk = freq;
     
@@ -329,6 +338,12 @@ void savePeriod(int channel, int period) {
 }
 
 void __ISR(_TIMER_2_VECTOR, ipl7auto) Timer2ISR() {
-    PORTAbits.RA15 = 1;
+        
+    if (T2callbackflag == 1)
+    {
+        T2callbackfp();
+    }
+    
+//    PORTAbits.RA15 = 1;
     IFS0bits.T2IF = 0;
 }

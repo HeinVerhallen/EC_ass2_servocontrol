@@ -34,6 +34,10 @@
  * 
  * @return success
  */
+
+typedef void (*T2callback)(void);
+void timer_register_T2Callback(T2callback ptr_T2callback);
+
 int timer_init(int freq, int channel, int periodMs, int interruptEnabled, int interruptPriority);
 
 /**

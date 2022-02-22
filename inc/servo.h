@@ -18,6 +18,7 @@
 #ifndef _SERVO_H    /* Guard against multiple inclusion */
 #define _SERVO_H
 
+void servo_T2callback();
 
 
 /* ========================================================================== */
