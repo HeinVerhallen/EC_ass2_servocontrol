@@ -343,7 +343,5 @@ void __ISR(_TIMER_2_VECTOR, ipl7auto) Timer2ISR() {
     {
         T2callbackfp();
     }
-    
-//    PORTAbits.RA15 = 1;
     IFS0bits.T2IF = 0;
 }

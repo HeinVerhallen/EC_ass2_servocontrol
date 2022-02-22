@@ -47,13 +47,25 @@
 /* This section lists the other files that are included in this file.
  */
 
+#define SPIFLASH_PROG_ADDR 0x100
 
 
 int main()
 {
     
     _CP0_SET_COUNT(0);
-    int servoPos = 0;
+    
+    
+    unsigned int len = 1;
+    unsigned char pBuf[len];
+    
+    
+    SPIFLASH_Init();
+    
+    SPIFLASH_Read(SPIFLASH_PROG_ADDR, pBuf, len);
+    
+    int servoPos = (int)pBuf[1]; // not sure if this works
+    
     servo_init(40000000,1,servoPos);
     
     initButtons();
@@ -103,6 +115,9 @@ int main()
                 }
             }
         }
+        SPIFLASH_Erase4k(SPIFLASH_PROG_ADDR);
+        pBuf[1] = servoPos;
+        SPIFLASH_ProgramPage(SPIFLASH_PROG_ADDR, pBuf, len);
         servo_setpos(1,servoPos);
     }
     return 0;
