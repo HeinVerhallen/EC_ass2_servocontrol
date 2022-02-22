@@ -327,3 +327,8 @@ void savePeriod(int channel, int period) {
             break;
     }
 }
+
+void __ISR(_TIMER_2_VECTOR, ipl7auto) Timer2ISR() {
+    PORTAbits.RA15 = 1;
+    IFS0bits.T2IF = 0;
+}

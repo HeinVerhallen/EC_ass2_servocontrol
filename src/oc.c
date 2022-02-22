@@ -172,3 +172,9 @@ void setupOc(int channel, int timerChannel, int period) {
 int getTimerCode(int timerChannel) {
     return timerChannel == 2 ? 0 : 1;
 }
+
+void __ISR(_OUTPUT_COMPARE_1_VECTOR, ipl7auto) Oc1ISR() {
+    PORTAbits.RA15 = 0;
+    //RPA15R = 0;
+    IFS0bits.OC1IF = 0;
+}
