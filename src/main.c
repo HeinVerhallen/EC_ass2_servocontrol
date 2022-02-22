@@ -30,12 +30,14 @@
 #include <sys/attribs.h>
 
 #include <config.h>
-// EC assignment 1 lib's
+// EC assignment 2 lib's
 #include <pragma.h>
 #include <config.h>
 #include <oc.h>
 #include <pwm.h>
 #include <timer.h>
+#include <spiflash.h>
+#include <i2c.h>
 
 #include <stdbool.h>
 #include <debounce.h>
