@@ -19,7 +19,7 @@
 #define _SERVO_H
 
 void servo_T2callback();
-
+void servo_OC1callback();
 
 /* ========================================================================== */
 /* function: servo_init( fpb, channel, angle ); */

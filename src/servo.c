@@ -33,7 +33,7 @@
 #include <stdbool.h>
 
 #include <timer.h> // bad practice
-
+#include <oc.h> // bad practice
 
 unsigned char servo_init
 (
@@ -54,7 +54,8 @@ int angle
     }
     
     timer_register_T2callback(servo_T2callback);
-    
+    OC1_register_OC1callback(servo_OC1callback);
+
     
     pwm_init(fpb, 2, channel, 20);
     servo_setpos(channel,angle);
@@ -65,6 +66,11 @@ int angle
 void servo_T2callback()
 {
     PORTAbits.RA15 = 1;
+}
+
+void servo_OC1callback()
+{
+    PORTAbits.RA15 = 0;
 }
 
 void servo_setpos

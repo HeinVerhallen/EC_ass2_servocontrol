@@ -9,6 +9,15 @@
 
 int clk;
 
+OC1callback OC1callbackfp;
+unsigned char OC1callbackflag = 0;
+
+void OC1_register_OC1callback(OC1callback ptr_OC1callback) 
+{
+    OC1callbackfp = ptr_OC1callback;
+    OC1callbackflag = 1;
+}
+
 int oc_init(int freq, int channel, int timerChannel, int period, int interruptEnabled, int interruptPriority) {
     clk = freq;
     
@@ -174,7 +183,9 @@ int getTimerCode(int timerChannel) {
 }
 
 void __ISR(_OUTPUT_COMPARE_1_VECTOR, ipl7auto) Oc1ISR() {
-    PORTAbits.RA15 = 0;
-    //RPA15R = 0;
+    if (OC1callbackflag == 1)
+    {
+        OC1callbackfp();
+    }
     IFS0bits.OC1IF = 0;
 }

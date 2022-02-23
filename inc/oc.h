@@ -12,7 +12,8 @@
 /**
  * External functions
  */
-
+typedef void (*OC1callback)(void);
+void OC1_register_OC1Callback(OC1callback ptr_OC1callback);
 /**
  * Initialize an OC for a specific timer
  * 
