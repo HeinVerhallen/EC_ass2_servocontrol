@@ -53,7 +53,7 @@
 int main()
 {
     
-    _CP0_SET_COUNT(0);
+    _CP0_SET_COUNT(0); // 40mhz????
     
     
     unsigned int len = 1;
@@ -65,6 +65,7 @@ int main()
     SPIFLASH_Read(SPIFLASH_PROG_ADDR, pBuf, len);
     
     int servoPos = (int)pBuf[1]; // not sure if this works
+    float servoPosTemp = servoPos;
     
     servo_init(40000000,1,servoPos);
     
@@ -79,6 +80,15 @@ int main()
     
     macro_enable_interrupts();
     
+    int buttonCactive = 0;
+    int buttonRactive = 0;
+    
+    int waitTime = 666667;
+    
+    long int buttonCwait = 0;
+    long int buttonRwait = 0;
+    
+    
     while (1)
     {
         int buttonC1 = prt_BTN_BTNC;
@@ -92,29 +102,48 @@ int main()
             continue;
         }
         
-        if (debounceButtonC == 1)
+        if (debounceButtonC == 1 || buttonCactive)
         {
-            if (servoPos < 45)
+            if (buttonC1)
             {
-                servoPos += 5;
-                if (servoPos > 45)
+                buttonCactive = 1;
+            }
+            else if (!buttonC1)
+            {
+                buttonCactive = 0;
+            }
+            if (servoPosTemp < 45 && buttonCwait + waitTime <= _CP0_GET_COUNT())
+            {
+                buttonCwait = _CP0_GET_COUNT();
+                servoPosTemp += (1.0/6.0);
+                if (servoPosTemp > 45)
                 {
-                    servoPos = 45;
+                    servoPosTemp = 45;
                 }
             }
             
         }
-        else if(debounceButtonR == 1)
+        else if(debounceButtonR == 1 || buttonRactive)
         {
-           if (servoPos > -45)
+            if (buttonR1)
             {
-                servoPos -= 5;
-                if (servoPos < -45)
+                buttonRactive = 1;
+            }
+            else if (!buttonR1)
+            {
+                buttonCactive = 0;
+            }
+           if (servoPosTemp > -45 && buttonRwait + waitTime <= _CP0_GET_COUNT())
+            {
+                buttonRwait = _CP0_GET_COUNT();
+                servoPosTemp -= (1.0/6.0);
+                if (servoPosTemp < -45)
                 {
-                    servoPos = -45;
+                    servoPosTemp = -45;
                 }
             }
         }
+        servoPos = (int)servoPosTemp;
         SPIFLASH_Erase4k(SPIFLASH_PROG_ADDR);
         pBuf[1] = servoPos;
         SPIFLASH_ProgramPage(SPIFLASH_PROG_ADDR, pBuf, len);
